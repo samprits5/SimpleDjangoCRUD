@@ -1,0 +1,24 @@
+body{
+	background: #c1c1c1;
+}
+
+.section1 {
+
+	margin-top: 5rem;
+
+	padding: 2rem;
+}
+
+.section2 {
+
+	padding: 3rem;
+}
+
+.label1 {
+
+	font-size: 22px;
+}
+
+.fa {
+	color: black;
+}

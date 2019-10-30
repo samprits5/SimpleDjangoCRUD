@@ -1,0 +1,119 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Add Data To Table</title>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<link rel="stylesheet" href='{% static "css/style.css" %}'>
+	<script
+	  src="https://code.jquery.com/jquery-3.4.1.min.js"
+	  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+	  crossorigin="anonymous"></script>
+
+	 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/esm/popper.min.js"></script>
+
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="container">
+
+		<div class="row section1">
+			<div class="col m-auto">
+
+
+				{% if messages %}
+				<div class="alert alert-danger" role="alert">
+					<ul class="messages">
+					    {% for message in messages %}
+					    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+					    {% endfor %}
+					</ul>
+				</div>
+				{% endif %}
+
+
+
+
+				{% if request.GET.uid is None %}
+
+					<form action="{% url 'home' %}" method="post">
+							{% csrf_token %}
+						<div class="form-group">
+						    <label for="record" class="label1">Add Record</label>
+						    <input type="text" class="form-control" name="record" id="record" aria-describedby="recordHelp" placeholder="Enter Value">
+						  </div>
+
+						  <button type="submit" class="btn btn-outline-dark">Add</button>
+					</form>
+
+				{% else %}
+					<form action="{% url 'update' %}?uid={{request.GET.uid}}" method="post">
+
+						{% csrf_token %}
+						<div class="form-group">
+						    <label for="record" class="label1">Edit Record</label>
+						    <input type="text" class="form-control" name="record" id="record" aria-describedby="recordHelp" value="{{ user }}">
+						  </div>
+
+						  <button type="submit" class="btn btn-outline-dark">Update</button>
+					</form>
+
+				{% endif %}
+					
+			</div>
+		</div>
+
+		{% if data is not None %}
+
+		<div class="row section2">
+			<div class="col text-center">
+
+				<table class="table">
+				  <thead class="thead-dark">
+				    <tr>
+				      <th scope="col">Sl No</th>
+				      <th scope="col">Full Name</th>
+				      <th scope="col">Action</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+					{% for row in data %}
+					    <tr>
+					      <th>{{ forloop.counter }}</th>
+					      <td>{{ row.name }}</td>
+					      <td>
+
+					      	<a href="{% url 'home' %}?uid={{ row.id }}">
+					      		<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+					      	</a>
+
+					      	<a href="{% url 'delete' %}?id={{ row.id }}">
+					      		<i class="fa fa-trash" aria-hidden="true"></i>
+					      	</a>
+
+
+					      </td>
+					    </tr>
+					{% endfor %}
+				  </tbody>
+				</table>
+				
+			</div>
+		</div>
+		
+		{% else %}
+
+			<div class="alert alert-danger" role="alert">
+			  No records found!
+			</div>
+
+		{% endif %}
+	</div>
+</body>
+</html>
